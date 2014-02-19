@@ -186,7 +186,8 @@ class Syslog::Logger
 
   def add severity, message = nil, progname = nil, &block
     severity ||= ::Logger::UNKNOWN
-    @level <= severity and
+    level = @level.is_a?(Symbol) ? ::Logger.const_get(@level.to_s.upcase) : @level
+    level <= severity and
       @@syslog.log LEVEL_MAP[severity], '%s', formatter.call(severity, Time.now, progname, (message || block.call))
     true
   end
