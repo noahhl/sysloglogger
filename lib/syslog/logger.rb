@@ -103,7 +103,8 @@ class Syslog::Logger
       end
 
       def #{meth}?
-        @level <= #{level}
+        l = @level.is_a?(Symbol) ? ::Logger.const_get(@level.to_s.upcase) : @level
+        l <= #{level}
       end
     EOM
   end
